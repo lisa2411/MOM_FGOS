@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Как прошёл урок?</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Neue', cursive;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0f7fa, #bbdefb);
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            background-color: white;
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            border: 5px solid #ffcc80;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 2.8rem;
+            text-shadow: 2px 2px 0 #ffcc80;
+            letter-spacing: 1px;
+        }
+        
+        .game-area {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            background: linear-gradient(to bottom, #87CEEB, #64b5f6);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            border: 5px solid #42a5f5;
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        
+        .grass {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(to top, #388e3c, #7CFC00);
+            border-top: 5px solid #2e7d32;
+        }
+        
+        .sun {
+            position: absolute;
+            top: 25px;
+            right: 40px;
+            font-size: 65px;
+            filter: drop-shadow(0 0 10px rgba(255, 235, 59, 0.7));
+            animation: sun-glow 4s infinite alternate;
+            z-index: 10;
+        }
+        
+        @keyframes sun-glow {
+            from { transform: scale(1) rotate(0deg); }
+            to { transform: scale(1.1) rotate(5deg); }
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.3rem;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            min-width: 200px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
+        }
+        
+        .btn:active {
+            transform: translateY(-2px);
+        }
+        
+        .btn-1 {
+            background: linear-gradient(to bottom, #66bb6a, #4CAF50);
+            color: white;
+            border: 3px solid #2e7d32;
+        }
+        
+        .btn-2 {
+            background: linear-gradient(to bottom, #ffd54f, #FFC107);
+            color: #333;
+            border: 3px solid #ff8f00;
+        }
+        
+        .btn-3 {
+            background: linear-gradient(to bottom, #ef5350, #F44336);
+            color: white;
+            border: 3px solid #c62828;
+        }
+        
+        .flower {
+            position: absolute;
+            bottom: 80px;
+            font-size: 45px;
+            z-index: 5;
+            animation: grow 1.5s ease-out;
+            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3));
+        }
+        
+        @keyframes grow {
+            0% { 
+                transform: scale(0) translateY(100px);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.2) translateY(-15px);
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .cloud {
+            position: absolute;
+            font-size: 70px;
+            z-index: 4;
+            animation: cloud-float 8s ease-out forwards;
+            filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.2));
+        }
+        
+        @keyframes cloud-float {
+            0% { 
+                transform: translateX(-100px);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(var(--stop-position));
+                opacity: 1;
+            }
+        }
+        
+        .raindrop {
+            position: absolute;
+            font-size: 35px;
+            z-index: 3;
+            animation: rain-fall 2.5s ease-out forwards;
+            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
+        }
+        
+        @keyframes rain-fall {
+            0% { 
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(var(--stop-position));
+                opacity: 1;
+            }
+        }
+        
+        .counter {
+            margin-top: 20px;
+            font-size: 1.4rem;
+            color: #555;
+            background: #e3f2fd;
+            padding: 12px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #bbdefb;
+        }
+        
+        .counter span {
+            font-weight: bold;
+            color: #1565c0;
+        }
+        
+        .instructions {
+            margin-top: 15px;
+            color: #666;
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Как прошёл урок?</h1>
+        
+        <div class="game-area" id="gameArea">
+            <div class="sun">☀️</div>
+            <div class="grass"></div>
+            <!-- Здесь будут появляться цветы, тучи и капли -->
+        </div>
+        
+        <div class="buttons">
+            <button class="btn btn-1" id="btnUnderstand">Всё понятно! 🌸</button>
+            <button class="btn btn-2" id="btnQuestions">Остались вопросы 💧</button>
+            <button class="btn btn-3" id="btnConfused">Ничего не понял ☁️</button>
+        </div>
+        
+        <div class="counter">
+            <p>Цветков: <span id="flowerCount">0</span> | Туч: <span id="cloudCount">0</span> | Капель: <span id="raindropCount">0</span></p>
+        </div>
+        
+        <div class="instructions">
+            Нажмите на кнопки, чтобы показать свои впечатления от урока!
+        </div>
+    </div>
+
+    <script>
+        // Получаем элементы
+        const gameArea = document.getElementById('gameArea');
+        const btnUnderstand = document.getElementById('btnUnderstand');
+        const btnQuestions = document.getElementById('btnQuestions');
+        const btnConfused = document.getElementById('btnConfused');
+        const flowerCount = document.getElementById('flowerCount');
+        const cloudCount = document.getElementById('cloudCount');
+        const raindropCount = document.getElementById('raindropCount');
+        
+        // Счетчики
+        let flowers = 0;
+        let clouds = 0;
+        let raindrops = 0;
+        
+        // Функция для создания цветка
+        function createFlower() {
+            const flower = document.createElement('div');
+            flower.className = 'flower';
+            flower.innerHTML = '🌷';
+            
+            // Случайная позиция на траве
+            const randomX = Math.random() * (gameArea.offsetWidth - 60);
+            flower.style.left = `${randomX}px`;
+            
+            gameArea.appendChild(flower);
+            
+            // Увеличиваем счетчик
+            flowers++;
+            flowerCount.textContent = flowers;
+        }
+        
+        // Функция для создания тучи
+        function createCloud() {
+            const cloud = document.createElement('div');
+            cloud.className = 'cloud';
+            
+            // Случайный выбор между обычной тучей и грозовой
+            const cloudType = Math.random() > 0.5 ? '☁️' : '⛈️';
+            cloud.innerHTML = cloudType;
+            
+            // Случайная высота и конечная позиция
+            const randomY = Math.random() * 150 + 30;
+            const stopPosition = Math.random() * (gameArea.offsetWidth - 200) + 100;
+            
+            cloud.style.top = `${randomY}px`;
+            cloud.style.setProperty('--stop-position', `${stopPosition}px`);
+            
+            gameArea.appendChild(cloud);
+            
+            // Увеличиваем счетчик
+            clouds++;
+            cloudCount.textContent = clouds;
+        }
+        
+        // Функция для создания капли дождя
+        function createRaindrop() {
+            const raindrop = document.createElement('div');
+            raindrop.className = 'raindrop';
+            raindrop.innerHTML = '💧';
+            
+            // Случайная позиция по горизонтали и конечная позиция по вертикали
+            const randomX = Math.random() * (gameArea.offsetWidth - 40);
+            const stopPosition = Math.random() * 300 + 50;
+            
+            raindrop.style.left = `${randomX}px`;
+            raindrop.style.setProperty('--stop-position', `${stopPosition}px`);
+            
+            gameArea.appendChild(raindrop);
+            
+            // Увеличиваем счетчик
+            raindrops++;
+            raindropCount.textContent = raindrops;
+        }
+        
+        // Добавляем обработчики событий
+        btnUnderstand.addEventListener('click', createFlower);
+        btnConfused.addEventListener('click', createCloud);
+        btnQuestions.addEventListener('click', createRaindrop);
+        
+        // Добавляем звуковые эффекты при нажатии кнопок
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Создаем звуковой контекст
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Разные звуки для разных кнопок
+                if (this.id === 'btnUnderstand') {
+                    oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // Нота C5
+                } else if (this.id === 'btnQuestions') {
+                    oscillator.frequency.setValueAtTime(392.00, audioContext.currentTime); // Нота G4
+                } else {
+                    oscillator.frequency.setValueAtTime(311.13, audioContext.currentTime); // Нота D#4
+                }
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            });
+        });
+    </script>
+</body>
+</html>
