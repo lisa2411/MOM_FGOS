@@ -1,361 +1,427 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Как прошёл урок?</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Comic Neue', cursive;
-        }
-        
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #e0f7fa, #bbdefb);
-            padding: 20px;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 900px;
-            text-align: center;
-            background-color: white;
-            border-radius: 25px;
-            padding: 25px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-            border: 5px solid #ffcc80;
-        }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 25px;
-            font-size: 2.8rem;
-            text-shadow: 2px 2px 0 #ffcc80;
-            letter-spacing: 1px;
-        }
-        
-        .game-area {
-            position: relative;
-            width: 100%;
-            height: 450px;
-            background: linear-gradient(to bottom, #87CEEB, #64b5f6);
-            border-radius: 20px;
-            overflow: hidden;
-            margin-bottom: 25px;
-            border: 5px solid #42a5f5;
-            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5);
-        }
-        
-        .grass {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 80px;
-            background: linear-gradient(to top, #388e3c, #7CFC00);
-            border-top: 5px solid #2e7d32;
-        }
-        
-        .sun {
-            position: absolute;
-            top: 25px;
-            right: 40px;
-            font-size: 65px;
-            filter: drop-shadow(0 0 10px rgba(255, 235, 59, 0.7));
-            animation: sun-glow 4s infinite alternate;
-            z-index: 10;
-        }
-        
-        @keyframes sun-glow {
-            from { transform: scale(1) rotate(0deg); }
-            to { transform: scale(1.1) rotate(5deg); }
-        }
-        
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-        
-        .btn {
-            padding: 15px 30px;
-            font-size: 1.3rem;
-            border: none;
-            border-radius: 60px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-            min-width: 200px;
-        }
-        
-        .btn:hover {
-            transform: translateY(-7px);
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
-        }
-        
-        .btn:active {
-            transform: translateY(-2px);
-        }
-        
-        .btn-1 {
-            background: linear-gradient(to bottom, #66bb6a, #4CAF50);
-            color: white;
-            border: 3px solid #2e7d32;
-        }
-        
-        .btn-2 {
-            background: linear-gradient(to bottom, #ffd54f, #FFC107);
-            color: #333;
-            border: 3px solid #ff8f00;
-        }
-        
-        .btn-3 {
-            background: linear-gradient(to bottom, #ef5350, #F44336);
-            color: white;
-            border: 3px solid #c62828;
-        }
-        
-        .flower {
-            position: absolute;
-            bottom: 80px;
-            font-size: 45px;
-            z-index: 5;
-            animation: grow 1.5s ease-out;
-            filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.3));
-        }
-        
-        @keyframes grow {
-            0% { 
-                transform: scale(0) translateY(100px);
-                opacity: 0;
-            }
-            70% {
-                transform: scale(1.2) translateY(-15px);
-            }
-            100% {
-                transform: scale(1) translateY(0);
-                opacity: 1;
-            }
-        }
-        
-        .cloud {
-            position: absolute;
-            font-size: 70px;
-            z-index: 4;
-            animation: cloud-float 8s ease-out forwards;
-            filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.2));
-        }
-        
-        @keyframes cloud-float {
-            0% { 
-                transform: translateX(-100px);
-                opacity: 0;
-            }
-            20% {
-                opacity: 1;
-            }
-            80% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateX(var(--stop-position));
-                opacity: 1;
-            }
-        }
-        
-        .raindrop {
-            position: absolute;
-            font-size: 35px;
-            z-index: 3;
-            animation: rain-fall 2.5s ease-out forwards;
-            filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.2));
-        }
-        
-        @keyframes rain-fall {
-            0% { 
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            20% {
-                opacity: 1;
-            }
-            80% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(var(--stop-position));
-                opacity: 1;
-            }
-        }
-        
-        .counter {
-            margin-top: 20px;
-            font-size: 1.4rem;
-            color: #555;
-            background: #e3f2fd;
-            padding: 12px 20px;
-            border-radius: 50px;
-            display: inline-block;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border: 2px solid #bbdefb;
-        }
-        
-        .counter span {
-            font-weight: bold;
-            color: #1565c0;
-        }
-        
-        .instructions {
-            margin-top: 15px;
-            color: #666;
-            font-size: 1.1rem;
-            font-style: italic;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Как прошёл урок?</h1>
-        
-        <div class="game-area" id="gameArea">
-            <div class="sun">☀️</div>
-            <div class="grass"></div>
-            <!-- Здесь будут появляться цветы, тучи и капли -->
-        </div>
-        
-        <div class="buttons">
-            <button class="btn btn-1" id="btnUnderstand">Всё понятно! 🌸</button>
-            <button class="btn btn-2" id="btnQuestions">Остались вопросы 💧</button>
-            <button class="btn btn-3" id="btnConfused">Ничего не понял ☁️</button>
-        </div>
-        
-        <div class="counter">
-            <p>Цветков: <span id="flowerCount">0</span> | Туч: <span id="cloudCount">0</span> | Капель: <span id="raindropCount">0</span></p>
-        </div>
-        
-        <div class="instructions">
-            Нажмите на кнопки, чтобы показать свои впечатления от урока!
-        </div>
-    </div>
 
-    <script>
-        // Получаем элементы
-        const gameArea = document.getElementById('gameArea');
-        const btnUnderstand = document.getElementById('btnUnderstand');
-        const btnQuestions = document.getElementById('btnQuestions');
-        const btnConfused = document.getElementById('btnConfused');
-        const flowerCount = document.getElementById('flowerCount');
-        const cloudCount = document.getElementById('cloudCount');
-        const raindropCount = document.getElementById('raindropCount');
-        
-        // Счетчики
-        let flowers = 0;
-        let clouds = 0;
-        let raindrops = 0;
-        
-        // Функция для создания цветка
-        function createFlower() {
-            const flower = document.createElement('div');
-            flower.className = 'flower';
-            flower.innerHTML = '🌷';
-            
-            // Случайная позиция на траве
-            const randomX = Math.random() * (gameArea.offsetWidth - 60);
-            flower.style.left = `${randomX}px`;
-            
-            gameArea.appendChild(flower);
-            
-            // Увеличиваем счетчик
-            flowers++;
-            flowerCount.textContent = flowers;
-        }
-        
-        // Функция для создания тучи
-        function createCloud() {
-            const cloud = document.createElement('div');
-            cloud.className = 'cloud';
-            
-            // Случайный выбор между обычной тучей и грозовой
-            const cloudType = Math.random() > 0.5 ? '☁️' : '⛈️';
-            cloud.innerHTML = cloudType;
-            
-            // Случайная высота и конечная позиция
-            const randomY = Math.random() * 150 + 30;
-            const stopPosition = Math.random() * (gameArea.offsetWidth - 200) + 100;
-            
-            cloud.style.top = `${randomY}px`;
-            cloud.style.setProperty('--stop-position', `${stopPosition}px`);
-            
-            gameArea.appendChild(cloud);
-            
-            // Увеличиваем счетчик
-            clouds++;
-            cloudCount.textContent = clouds;
-        }
-        
-        // Функция для создания капли дождя
-        function createRaindrop() {
-            const raindrop = document.createElement('div');
-            raindrop.className = 'raindrop';
-            raindrop.innerHTML = '💧';
-            
-            // Случайная позиция по горизонтали и конечная позиция по вертикали
-            const randomX = Math.random() * (gameArea.offsetWidth - 40);
-            const stopPosition = Math.random() * 300 + 50;
-            
-            raindrop.style.left = `${randomX}px`;
-            raindrop.style.setProperty('--stop-position', `${stopPosition}px`);
-            
-            gameArea.appendChild(raindrop);
-            
-            // Увеличиваем счетчик
-            raindrops++;
-            raindropCount.textContent = raindrops;
-        }
-        
-        // Добавляем обработчики событий
-        btnUnderstand.addEventListener('click', createFlower);
-        btnConfused.addEventListener('click', createCloud);
-        btnQuestions.addEventListener('click', createRaindrop);
-        
-        // Добавляем звуковые эффекты при нажатии кнопок
-        const buttons = document.querySelectorAll('.btn');
-        buttons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Создаем звуковой контекст
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                // Разные звуки для разных кнопок
-                if (this.id === 'btnUnderstand') {
-                    oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // Нота C5
-                } else if (this.id === 'btnQuestions') {
-                    oscillator.frequency.setValueAtTime(392.00, audioContext.currentTime); // Нота G4
-                } else {
-                    oscillator.frequency.setValueAtTime(311.13, audioContext.currentTime); // Нота D#4
-                }
-                
-                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-                
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.5);
-            });
-        });
-    </script>
-</body>
-</html>
+		<!DOCTYPE html>
+		<html lang="fr">
+			<head>
+				<meta charset="utf-8">
+				<meta name="viewport" content="width=device-width, height=device-height, viewport-fit=cover, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+				<meta name="description" content="Digipad permet de créer des murs multimédias collaboratifs.">
+				<meta name="robots" content="index, no-follow">
+				<meta name="theme-color" content="#00ced1">
+				<meta property="og:title" content="Digipad by La Digitale">
+				<meta property="og:description" content="Digipad permet de créer des murs multimédias collaboratifs.">
+				<meta property="og:type" content="website" />
+				<meta property="og:locale" content="fr_FR" />
+				<title>Digipad by La Digitale</title>
+				<link rel="icon" type="image/png" href="./static/img/favicon.png">
+				<link rel="stylesheet" href="./static/css/destyle.css">
+				<link rel="stylesheet" href="./static/css/main.css">
+				<link rel="stylesheet" href="./static/css/pad.css">
+				<script src="./static/js/vue.js" type="text/javascript"></script>
+				<script src="./static/js/vue-masonry-css.js" type="text/javascript"></script>
+			</head>
+			<body>
+				<noscript>
+					<strong>Veuillez activer Javascript dans votre navigateur pour utiliser <i>Digipad</i>.</strong>
+				</noscript>
+				<div id="app">
+					<main id="page" :class="pad.affichage">
+						<header v-if="!chargement">
+							<span id="titre">{{ pad.titre }}</span>
+						</header>
+
+						<div id="pad" :class="{'fond-personnalise': pad.fond.substring(0, 1) !== '#' && !pad.fond.includes('/img/') && (!pad.hasOwnProperty('fondRepete') || pad.fondRepete === 'desactive'), 'fond-personnalise-repete': pad.fond.substring(0, 1) !== '#' && !pad.fond.includes('/img/') && pad.hasOwnProperty('fondRepete') && pad.fondRepete === 'active'}" :style="definirFond(pad.fond)" v-if="!chargement">
+							<!-- Affichage mur -->
+							<masonry id="blocs" class="mur" :cols="definirLargeurCapsules()" :gutter="0" v-if="pad.affichage === 'mur'">
+								<div :id="item.bloc" class="bloc" v-for="(item, indexItem) in blocs" :style="{'border-color': item.couleur}" :data-bloc="item.bloc" :key="'bloc' + indexItem">
+									<div class="contenu">
+										<div class="titre" v-if="item.titre !== ''" :style="{'background': eclaircirCouleur(item.couleur)}">
+											<span>{{ item.titre }}</span>
+										</div>
+										<div class="texte" v-if="item.texte !== ''" v-html="item.texte"></div>
+										<div class="media" v-if="item.media !== ''">
+											<img role="button" tabindex="0" v-if="item.type === 'image'" :src="'./fichiers/' + item.media" @click="afficherMedia(item)" @keydown.enter="afficherMedia(item)">
+											<img role="button" tabindex="0" v-else-if="item.type === 'lien-image'" :src="item.media" @click="afficherMedia(item)" @keydown.enter="afficherMedia(item)">
+											<span role="button" tabindex="0" v-else-if="item.type === 'audio' || item.type === 'video' || item.type === 'document' || item.type === 'pdf' || item.type === 'office' || item.type === 'embed'" @click="afficherMedia(item)" @keydown.enter="afficherMedia(item)"><img :class="{'vignette': definirVignette(item).substring(0, 9) !== './static/'}" :src="definirVignette(item)"></span>
+											<span v-else-if="item.type === 'lien'"><a :href="item.media" target="_blank"><img :class="{'vignette': definirVignette(item).substring(0, 9) !== './static/'}" :src="definirVignette(item)"></a></span>
+											<span v-else><a :href="'./fichiers/' + item.media" download><img :class="{'vignette': definirVignette(item).substring(0, 9) !== './static/'}" :src="definirVignette(item)"></a></span>
+										</div>
+										<div class="evaluation" v-if="pad.evaluations === 'activees'">
+											<span class="etoiles">
+												<i class="material-icons" v-for="etoile in definirEvaluationCapsule(item.listeEvaluations)" :key="'etoilepleine_' + etoile">star</i>
+												<i class="material-icons" v-for="etoile in (5 - definirEvaluationCapsule(item.listeEvaluations))" :key="'etoilevide_' + etoile">star_outline</i>
+												<span>({{ item.listeEvaluations.length }})</span>
+											</span>
+										</div>
+										<div class="action" :style="{'color': item.couleur}">
+											<span role="button" tabindex="0" class="bouton" @click="ouvrirModaleCommentaires(item.bloc, item.titre)" @keydown.enter="ouvrirModaleCommentaires(item.bloc, item.titre)" v-if="pad.commentaires === 'actives'"><i class="material-icons">comment</i><span class="badge">{{ item.commentaires }}</span></span>
+											<span role="button" tabindex="0" class="bouton info" :data-description="item.info"><i class="material-icons">info</i></span>
+											<span class="media-type" v-if="item.media !== ''"><i class="material-icons">{{ definirIconeMedia(item) }}</i></span>
+										</div>
+									</div>
+								</div>
+							</masonry>
+							<!-- Affichage flux vertical -->
+							<div id="blocs" class="flux-vertical" :class="{'large': pad.hasOwnProperty('largeur') && pad.largeur === 'large'}" v-else-if="pad.affichage === 'flux-vertical'">
+								<div :id="item.bloc" class="bloc" v-for="(item, indexItem) in blocs" :style="{'border-color': item.couleur}" :data-bloc="item.bloc" :key="'bloc' + indexItem">
+									<div class="contenu">
+										<div class="titre" v-if="item.titre !== ''" :style="{'background': eclaircirCouleur(item.couleur)}">
+											<span>{{ item.titre }}</span>
+										</div>
+										<div class="texte" v-if="item.texte !== ''" v-html="item.texte"></div>
+										<div class="media" v-if="item.media !== ''">
+											<img role="button" tabindex="0" v-if="item.type === 'image'" :src="'./fichiers/' + item.media" @click="afficherMedia(item)" @keydown.enter="afficherMedia(item)">
+											<img role="button" tabindex="0" v-else-if="item.type === 'lien-image'" :src="item.media" @click="afficherMedia(item)" @keydown.enter="afficherMedia(item)">
+											<span role="button" tabindex="0" v-else-if="item.type === 'audio' || item.type === 'video' || item.type === 'document' || item.type === 'pdf' || item.type === 'office' || item.type === 'embed'" @click="afficherMedia(item)" @keydown.enter="afficherMedia(item)"><img :class="{'vignette': definirVignette(item).substring(0, 9) !== './static/'}" :src="definirVignette(item)"></span>
+											<span v-else-if="item.type === 'lien'"><a :href="item.media" target="_blank"><img :class="{'vignette': definirVignette(item).substring(0, 9) !== './static/'}" :src="definirVignette(item)"></a></span>
+											<span v-else><a :href="'./fichiers/' + item.media" download><img :class="{'vignette': definirVignette(item).substring(0, 9) !== './static/'}" :src="definirVignette(item)"></a></span>
+										</div>
+										<div class="evaluation" v-if="pad.evaluations === 'activees'">
+											<span class="etoiles">
+												<i class="material-icons" v-for="etoile in definirEvaluationCapsule(item.listeEvaluations)" :key="'etoilepleine_' + etoile">star</i>
+												<i class="material-icons" v-for="etoile in (5 - definirEvaluationCapsule(item.listeEvaluations))" :key="'etoilevide_' + etoile">star_outline</i>
+												<span>({{ item.listeEvaluations.length }})</span>
+											</span>
+										</div>
+										<div class="action" :style="{'color': item.couleur}">
+											<span role="button" tabindex="0" class="bouton" @click="ouvrirModaleCommentaires(item.bloc, item.titre)" @keydown.enter="ouvrirModaleCommentaires(item.bloc, item.titre)" v-if="pad.commentaires === 'actives'"><i class="material-icons">comment</i><span class="badge">{{ item.commentaires }}</span></span>
+											<span role="button" tabindex="0" class="bouton info" :data-description="item.info"><i class="material-icons">info</i></span>
+											<span class="media-type" v-if="item.media !== ''"><i class="material-icons">{{ definirIconeMedia(item) }}</i></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Affichage colonne -->
+							<div id="blocs" class="colonnes" v-else-if="pad.affichage === 'colonnes'">
+								<section :id="'colonne' + indexCol" class="colonne" :class="{'large': pad.hasOwnProperty('largeur') && pad.largeur === 'large'}" v-for="(col, indexCol) in pad.colonnes" :key="'colonne' + indexCol">
+									<div class="bloc haut">
+										<div class="titre-colonne">
+											<span>{{ col }}</span>
+										</div>
+									</div>
+									<div class="conteneur-colonne ascenseur" v-if="colonnes[indexCol].length > 0">
+										<div :id="item.bloc" class="bloc" v-for="(item, indexItem) in colonnes[indexCol]" :style="{'border-color': item.couleur}" :data-bloc="item.bloc" :key="'bloc' + indexItem">
+											<div class="contenu">
+												<div class="titre" v-if="item.titre !== ''" :style="{'background': eclaircirCouleur(item.couleur)}">
+													<span>{{ item.titre }}</span>
+												</div>
+												<div class="texte" v-if="item.texte !== ''" v-html="item.texte"></div>
+												<div class="media" v-if="item.media !== ''">
+													<img role="button" tabindex="0" v-if="item.type === 'image'" :src="'./fichiers/' + item.media" @click="afficherMedia(item)" @keydown.enter="afficherMedia(item)">
+													<img role="button" tabindex="0" v-else-if="item.type === 'lien-image'" :src="item.media" @click="afficherMedia(item)" @keydown.enter="afficherMedia(item)">
+													<span role="button" tabindex="0" v-else-if="item.type === 'audio' || item.type === 'video' || item.type === 'document' || item.type === 'pdf' || item.type === 'office' || item.type === 'embed'" @click="afficherMedia(item)" @keydown.enter="afficherMedia(item)"><img :class="{'vignette': definirVignette(item).substring(0, 9) !== './static/'}" :src="definirVignette(item)"></span>
+													<span v-else-if="item.type === 'lien'"><a :href="item.media" target="_blank"><img :class="{'vignette': definirVignette(item).substring(0, 9) !== './static/'}" :src="definirVignette(item)"></a></span>
+													<span v-else><a :href="'./fichiers/' + item.media" download><img :class="{'vignette': definirVignette(item).substring(0, 9) !== './static/'}" :src="definirVignette(item)"></a></span>
+												</div>
+												<div class="evaluation" v-if="pad.evaluations === 'activees'">
+													<span class="etoiles">
+														<i class="material-icons" v-for="etoile in definirEvaluationCapsule(item.listeEvaluations)" :key="'etoilepleine_' + etoile">star</i>
+														<i class="material-icons" v-for="etoile in (5 - definirEvaluationCapsule(item.listeEvaluations))" :key="'etoilevide_' + etoile">star_outline</i>
+														<span>({{ item.listeEvaluations.length }})</span>
+													</span>
+												</div>
+												<div class="action" :style="{'color': item.couleur}">
+													<span role="button" tabindex="0" class="bouton" @click="ouvrirModaleCommentaires(item.bloc)" @keydown.enter="ouvrirModaleCommentaires(item.bloc)" v-if="pad.commentaires === 'actives'"><i class="material-icons">comment</i><span class="badge">{{ item.commentaires }}</span></span>
+													<span role="button" tabindex="0" class="bouton info" :data-description="item.info"><i class="material-icons">info</i></span>
+													<span class="media-type" v-if="item.media !== ''"><i class="material-icons">{{ definirIconeMedia(item) }}</i></span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</section>
+							</div>
+						</div>
+
+						<div class="conteneur-modale" v-if="modaleCommentaires">
+							<div id="discussion" class="modale" role="dialog">
+								<div class="en-tete">
+									<span class="titre">{{ titre }}</span>
+									<span role="button" tabindex="0" class="fermer" @click="fermerModaleCommentaires" @keydown.enter="fermerModaleCommentaires"><i class="material-icons">close</i></span>
+								</div>
+								<ul class="commentaires ascenseur">
+									<li v-for="(entreeCommentaire, indexEntreeCommentaire) in commentaires" :key="indexEntreeCommentaire">
+										<span class="meta">// {{ noms[entreeCommentaire.identifiant] }}</span>
+										<div class="texte" v-html="entreeCommentaire.texte"></div>
+									</li>
+								</ul>
+							</div>
+						</div>
+						
+						<div id="conteneur-chargement" v-if="chargement">
+							<div id="chargement">
+								<div class="spinner">
+									<div></div>
+									<div></div>
+									<div></div>
+									<div></div>
+									<div></div>
+									<div></div>
+									<div></div>
+									<div></div>
+									<div></div>
+									<div></div>
+									<div></div>
+									<div></div>
+								</div>
+							</div>
+						</div>
+					</main>
+				</div>
+				
+				<script type="text/javascript">
+					var vm = new Vue({
+						el: '#app',
+						data: {
+							chargement: true,
+							modaleCommentaires: false,
+							pad: {"colonnes":"[\"Soft Skills, УУД\",\"Математическая грамотность\"]","commentaires":"actives","documents":"actives","contributions":"fermees","vues":"0","listeUtilisateurs":"activee","identifiant":"56789","digidrive":"0","acces":"public","evaluations":"activees","token":"12a1a436eb59","editionNom":"activee","fichiers":"actives","affichageColonnes":"[true,true]","id":"1600627","registreActivite":"active","fond":"#fbf8f7","affichage":"colonnes","enregistrements":"actives","liens":"actives","date":"2026-02-27T20:38:04+00:00","bloc":"119","ordre":"croissant","copieBloc":"activee","code":"733516","titre":"МОМ ФГОС Стендовый доклад Soft Skills, УУД, Функциональная грамотность","conversation":"activee","largeur":"normale","activite":"4"},
+							blocs: [{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-177222468434663c25","commentaires":0,"iframe":"","texte":"<div>1. Гиматдинова, Г.Н. Формирование универсальных учебных регулятивных действий обучающихся 7–9 классов в условиях смешанного обучения математике : спец. 5.8.2 «Теория и методика обучения и воспитания (математика и информатика, уровень основного общего образования)» : автореф. дис. … канд. пед. наук / Гиматдинова Галия Нурулловна ; Красноярский гос. пед. ун-т им. </div><div>В.П. Астафьева. –\n\nКрасноярск, 2024. </div><div>– 24 с.</div>","vignette":"ddndndndndn_ddddndddddd-dd_2023_2mdv124uonj.jpg","colonne":"0","identifiant":"56789","media":"ddndndndndn_ddddndddddd-dd_2023_2mdv124uonj.pdf","evaluations":0,"titre":"Универсальные учебные регулятивные действия","id":"53","type":"pdf","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"ZR8138","info":"Created on 02/27/2026 at 8:38 PM by ZR8138."},{"id":"52","bloc":"bloc-id-17722246843462089f8","titre":"Кандидатская диссертация","texte":"","media":"ddnndnndndn_ddddndddddd-dd_2023_aparo0gmvfh.pdf","iframe":"","type":"pdf","source":"","vignette":"ddnndnndndn_ddddndddddd-dd_2023_aparo0gmvfh.jpg","date":"2026-02-27T20:38:04+00:00","identifiant":"56789","commentaires":0,"evaluations":0,"colonne":"0","visibilite":"visible","listeCommentaires":[],"listeEvaluations":[],"nom":"EQ1169","info":"Created on 02/27/2026 at 8:38 PM by EQ1169."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-177222468434656e7b8","commentaires":0,"iframe":"","texte":"<div>🔹 Модель формирования универсальных учебных регулятивных действий обучающихся 7–9 классов в условиях смешанного обучения математике</div><div><br></div>","vignette":"","colonne":"0","identifiant":"56789","media":"n12_xjwpxl5ljl.png","evaluations":0,"titre":"","id":"54","type":"image","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"II3887","info":"Created on 02/27/2026 at 8:38 PM by II3887."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-17722246843469ee6b8","commentaires":0,"iframe":"","texte":"<div>🔹 Разноуровневая диагностическая карта универсальных учебных регулятивных действий (целевой компонент)</div>","vignette":"/img/telechargement.png","colonne":"0","identifiant":"56789","media":"n13_6649ht87194.png","evaluations":0,"titre":"","id":"55","type":"image","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"OZ5859","info":"Created on 02/27/2026 at 8:38 PM by OZ5859."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-1772224684346f1d78","commentaires":0,"iframe":"","texte":"<div>🔹 Конструктор заданий для формирования универсальных учебных регулятивных действий обучающихся</div>","vignette":"/img/telechargement.png","colonne":"0","identifiant":"56789","media":"n15_9mazuobmt8p.png","evaluations":0,"titre":"","id":"56","type":"image","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"ID5183","info":"Created on 02/27/2026 at 8:38 PM by ID5183."},{"id":"57","bloc":"bloc-id-17722246843467c5cd8","titre":"","texte":"","media":"n16_ddl8ovas8cj.png","iframe":"","type":"image","source":"","vignette":"","date":"2026-02-27T20:38:04+00:00","identifiant":"56789","commentaires":0,"evaluations":0,"colonne":"0","visibilite":"visible","listeCommentaires":[],"listeEvaluations":[],"nom":"LH9013","info":"Created on 02/27/2026 at 8:38 PM by LH9013."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-1772224684346aa1818","commentaires":0,"iframe":"","texte":"<div>🔹 <b>Примеры</b> задач и заданий для формирования универсальных учебных регулятивных действий обучающихся 7–9 классов </div>","vignette":"","colonne":"0","identifiant":"56789","media":"n17_gfftzelg8l.png","evaluations":0,"titre":"","id":"58","type":"image","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"JF9110","info":"Created on 02/27/2026 at 8:38 PM by JF9110."},{"id":"59","bloc":"bloc-id-17722246843465d3c48","titre":"","texte":"","media":"n18_f65mw289hxs.png","iframe":"","type":"image","source":"","vignette":"","date":"2026-02-27T20:38:04+00:00","identifiant":"56789","commentaires":0,"evaluations":0,"colonne":"0","visibilite":"visible","listeCommentaires":[],"listeEvaluations":[],"nom":"LD8209","info":"Created on 02/27/2026 at 8:38 PM by LD8209."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-177222468434666d7a8","commentaires":0,"iframe":"","texte":"<div>🔹Приёмы, направленные на формирование универсальных \nучебных регулятивных действий на уроках математики  </div>","vignette":"/img/telechargement.png","colonne":"0","identifiant":"56789","media":"n19_89o5v4z9vpc.png","evaluations":0,"titre":"","id":"60","type":"image","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"FZ5127","info":"Created on 02/27/2026 at 8:38 PM by FZ5127."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-17722246843464900c8","commentaires":0,"iframe":"","texte":"<div>🔹 Современные цифровые образовательные ресурсы, используемые в математической подготовке обучающихся 7–9 классов в условиях смешанного обучения</div>","vignette":"/img/telechargement.png","colonne":"0","identifiant":"56789","media":"n20_4x1ubcvrerf.png","evaluations":0,"titre":"","id":"61","type":"image","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"QG6155","info":"Created on 02/27/2026 at 8:38 PM by QG6155."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-1772224684346e17628","commentaires":0,"iframe":"","texte":"<div>2. Юдина, Ю.А. Формирование познавательных универсальных учебных действий у учащихся 7-9 классов в процессе изучения элементов теории вероятности и статистики / </div><div>Ю.А. Юдина, Н.А. Храмова // Вестник Башкирского государственного педагогического университета им. </div><div>М. Акмуллы. – 2023. – № 3 (SI1 (68)). \n\n–  С. 227–231.</div>","vignette":"ddddd-dd-2023-_6auwd3meiru.jpg","colonne":"0","identifiant":"56789","media":"ddddd-dd-2023-_6auwd3meiru.pdf","evaluations":0,"titre":"","id":"66","type":"pdf","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"UH4404","info":"Created on 02/27/2026 at 8:38 PM by UH4404."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-1772224684346ce7c6","commentaires":0,"iframe":"","texte":"<div>В статье рассматриваются \nособенности формирования познавательных УУД по учебному курсу «Вероятность и \nстатистика», ориентированного для обучающихся 7-9 классов, приведен <b>пример </b></div>","vignette":"","colonne":"0","identifiant":"56789","media":"n22_xfkj4za5o0c.png","evaluations":0,"titre":"","id":"67","type":"image","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"ET9173","info":"Created on 02/27/2026 at 8:38 PM by ET9173."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-1772224684346085428","commentaires":0,"iframe":"","texte":"<div>3. Афонин, В.В. К вопросу о формировании и развитии гибких навыков (soft skills) обучающихся путём использования образовательных Web-квестов на уроках математики в средней школе / В.В. Афонин, </div><div>А.В. Бугаенко, Г.Н. Кимаковская // Актуальные проблемы теории и практики обучения физико-математическим и техническим дисциплинам в современном образовательном пространстве : материалы VI Всероссийской (с международным участием) научно-практич. конф., 15–16 декабря 2022 года / Курский гос. ун-т ; редкол. : </div><div>В.Н. Фрундин [и др.]. – Курск : Изд-во: КГУ, 2022. – С. 14–20.</div>","vignette":"dndddd-dd-2022_u479fcon9r.jpg","colonne":"0","identifiant":"56789","media":"dndddd-dd-2022_u479fcon9r.pdf","evaluations":0,"titre":"Гибкие навыки ","id":"62","type":"pdf","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"GV3842","info":"Created on 02/27/2026 at 8:38 PM by GV3842."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-1772224684346f9df4","commentaires":0,"iframe":"","texte":"<div>Авторами данной статьи была разработана серия образовательных Web-квестов, направленных на формирование и развитие гибких навыков.</div><div>Ссылка на образовательный Web-квест <b>«Логарифмы и их свойства. Логарифмическая функция. Логарифмические уравнения» </b>для<b> </b>11 класса</div><div><a href=\"https://sites.google.com/view/web-quest-log\" target=\"_blank\">https://sites.google.com/view/web-quest-log</a></div>","vignette":"/img/telechargement.png","colonne":"0","identifiant":"56789","media":"n21_qwsux1aqp3.png","evaluations":0,"titre":"","id":"63","type":"image","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"SX8955","info":"Created on 02/27/2026 at 8:38 PM by SX8955."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-17722246843469411a","commentaires":0,"iframe":"","texte":"<div>4. Колосова, Н.Н. Веб-квест как средство формирования гибких навыков будущих педагогов в условиях высшего учебного заведения / Н.Н. Колосова // Открытое образование. – 2024. \n\n– №28(3). – С. 25–34.</div>","vignette":"ddddnddd-dd-2024_ksmtd6fqorj.jpg","colonne":"0","identifiant":"56789","media":"ddddnddd-dd-2024_ksmtd6fqorj.pdf","evaluations":0,"titre":"","id":"64","type":"pdf","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"GK7348","info":"Created on 02/27/2026 at 8:38 PM by GK7348."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-1772224684346d4286","commentaires":0,"iframe":"","texte":"<div>В данной статье представлены авторские дефиниции понятий «гибкие навыки будущего педагога» и «веб-квест», охарактеризованы гибкие навыки современного педагога, подробно описаны специфика, структура и методика проведения веб-квеста, его влияние на целенаправленное формирование гибких навыков, приведен пример веб-квеста «Сущность профессиональной компетентности педагога», разработанный и апробированный в работе со студентами</div>","vignette":"/img/telechargement.png","colonne":"0","identifiant":"56789","media":"","evaluations":0,"titre":"","id":"65","type":"","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"KY2374","info":"Created on 02/27/2026 at 8:38 PM by KY2374."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-177222468434625de38","commentaires":0,"iframe":"","texte":"<div>1. Шутрова, И.В. Формирование функциональной математической грамотности в процессе обучения математике на уровне основного общего образования посредством сквозных контекстных задач : спец. 5.8.2 «Теория и методика обучения и воспитания (математика, математика и механика (основное общее образование))» : автореф. дис. … канд. пед. наук / Шутрова Ирина Владиславовна \n\n; Северный (Арктический) федеральный университет имени М.В. Ломоносова. – \n\nАрхангельск, 2025. – 26 с.</div>","vignette":"ddndndndndn_dnnnddd-dd_2025_9umgzim6fx.jpg","colonne":"1","identifiant":"56789","media":"ddndndndndn_dnnnddd-dd_2025_9umgzim6fx.pdf","evaluations":0,"titre":"","id":"68","type":"pdf","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"YV3517","info":"Created on 02/27/2026 at 8:38 PM by YV3517."},{"id":"69","bloc":"bloc-id-1772224684346eac7e","titre":"Кандидатская диссертация","texte":"","media":"ddnndnndndn_dnnnddd-dd_2025_vbl15cls4n.pdf","iframe":"","type":"pdf","source":"","vignette":"ddnndnndndn_dnnnddd-dd_2025_vbl15cls4n.jpg","date":"2026-02-27T20:38:04+00:00","identifiant":"56789","commentaires":0,"evaluations":0,"colonne":"1","visibilite":"visible","listeCommentaires":[],"listeEvaluations":[],"nom":"UC1181","info":"Created on 02/27/2026 at 8:38 PM by UC1181."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-17722246843466b961","commentaires":0,"iframe":"","texte":"<div>Задача формирования <b>функциональной математической грамотности</b> получила отражение в федеральных рабочих программах по учебному предмету «Математика» как базового, так и углубленного уровней. Её решение здесь названо одной из приоритетных целей обучения математике на уровне основного общего образования </div>","vignette":"/img/telechargement.png","colonne":"1","identifiant":"56789","media":"","evaluations":0,"titre":"","id":"70","type":"","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"TQ4698","info":"Created on 02/27/2026 at 8:38 PM by TQ4698."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-17722246843462a545","commentaires":0,"iframe":"","texte":"<div>Научно-педагогическим сообществом признается возможность формирования функциональной математической грамотности как во внеурочной (<b>проектная деятельность</b>), так и в урочной деятельности (урок одной задачи, <b>урок изучения нового материала </b>(подводящие задачи), <b>урок обобщения, отдельные уроки, посвященные вопросу формирования функциональной математической грамотности</b> и т.д.). Основным средством, применяемым для формирования функциональной математической грамотности учащихся основной школы, являются <b>контекстные задачи</b></div>","vignette":"","colonne":"1","identifiant":"56789","media":"","evaluations":0,"titre":"","id":"71","type":"","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"GP8076","info":"Created on 02/27/2026 at 8:38 PM by GP8076."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-17722246843463aace","commentaires":0,"iframe":"","texte":"<div>Отличительной особенностью<b> контекстных задач </b>является включение в формулировку описания внешнего контекста, т.е. жизненной ситуации, требующей от субъекта этой ситуации осуществления некоторых практических действий или принятия практически значимых для него решений с опорой на свой опыт и научные знания</div>","vignette":"/img/telechargement.png","colonne":"1","identifiant":"56789","media":"","evaluations":0,"titre":"","id":"72","type":"","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"SD8901","info":"Created on 02/27/2026 at 8:38 PM by SD8901."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-177222468434654617","commentaires":0,"iframe":"","texte":"<div>Формирование готовности к проявлению<b> функциональной математической грамотности</b> в типовых жизненных ситуациях предполагает реализацию <b>теоретической модели</b>, включающей целевой, содержательный, процессуально функциональный, критериально-оценочный и результативный блоки </div>","vignette":"/img/telechargement.png","colonne":"1","identifiant":"56789","media":"n23_dql1kxa8mkg.png","evaluations":0,"titre":"","id":"73","type":"image","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"TK5586","info":"Created on 02/27/2026 at 8:38 PM by TK5586."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-17722246843469f73e","commentaires":0,"iframe":"","texte":"<div>Под готовностью обучающихся к проявлению <b>функциональной математической грамотности</b> в типовых жизненных ситуация исследователь Шутрова И.В понимает особую разновидность ситуативной психологической готовности, которая проявляется в предпочтительном выборе математических средств и методов деятельности в тех жизненных ситуациях, где они распознаются как наиболее эффективные</div>","vignette":"/img/telechargement.png","colonne":"1","identifiant":"56789","media":"","evaluations":0,"titre":"","id":"74","type":"","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"SB2342","info":"Created on 02/27/2026 at 8:38 PM by SB2342."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-1772224684346206618","commentaires":0,"iframe":"","texte":"<b>🔹 Классификация </b>практико-ориентированных задач","vignette":"/img/telechargement.png","colonne":"1","identifiant":"56789","media":"n23_kcouz3tqpwr.jpg","evaluations":0,"titre":"","id":"75","type":"image","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"PS9811","info":"Created on 02/27/2026 at 8:38 PM by PS9811."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-17722246843473990c8","commentaires":0,"iframe":"","texte":"<div>\n\nШутрова И.В  понимает под <b>сквозными контекстными задачами</b> особую разновидность комплексных контекстных задач, в которой отдельные задания распределены по темам и годам обучения и пронизывают весь курс математики основной школы, обеспечивая возможность многократного возвращения к одному и тому же общему контексту, представляющему тип жизненных ситуаций проявления функциональной математической грамотности, возникающих при взаимодействии с объектом реальной действительности</div>","vignette":"/img/telechargement.png","colonne":"1","identifiant":"56789","media":"","evaluations":0,"titre":"","id":"76","type":"","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"EG3673","info":"Created on 02/27/2026 at 8:38 PM by EG3673."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-17722246843474dc7e8","commentaires":0,"iframe":"","texte":"<div>🔹 Характеристика критериев готовности обучающихся к проявлению функциональной математической грамотности в типовых жизненных ситуациях минимального поля</div>","vignette":"/img/telechargement.png","colonne":"1","identifiant":"56789","media":"n24_dwou2onhoa.png","evaluations":0,"titre":"","id":"77","type":"image","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"DL9560","info":"Created on 02/27/2026 at 8:38 PM by DL9560."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-1772224684347d0c158","commentaires":0,"iframe":"","texte":"<div>🔹 Теоретическая модель формирования готовности обучающихся к проявлению функциональной математической грамотности (ФМГ) в типовых жизненных ситуациях </div>","vignette":"/img/telechargement.png","colonne":"1","identifiant":"56789","media":"n25_rszepmyh2x.png","evaluations":0,"titre":"","id":"78","type":"image","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"RR4695","info":"Created on 02/27/2026 at 8:38 PM by RR4695."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-177222468434799a03","commentaires":0,"iframe":"","texte":"<div><b>🔹 Пример </b>фрагмента региональной сквозной контекстной задачи «Качество воды в Архангельской области»</div>","vignette":"","colonne":"1","identifiant":"56789","media":"n26_s3245zda3y9.png","evaluations":0,"titre":"","id":"79","type":"image","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"NH9594","info":"Created on 02/27/2026 at 8:38 PM by NH9594."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-1772224684347ede778","commentaires":0,"iframe":"","texte":"<b>🔹</b> Методика работы с контекстом задачи","vignette":"","colonne":"1","identifiant":"56789","media":"n27_fosmo9bau59.png","evaluations":0,"titre":"","id":"80","type":"image","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"FI6089","info":"Created on 02/27/2026 at 8:38 PM by FI6089."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-1772224684347851a68","commentaires":0,"iframe":"","texte":"<div>2. \n\nСеменякина, А.А. Математическая грамотность обучающихся в условиях перехода к стандартам третьего поколения / А.А. Семенякина // Закономерности и тенденции инновационного развития общества : материалы междунар. научно-пр. конф., Пермь, 25 августа 2022 года ; редкол. : \n\nСукиасян А.А. [и др.]. \n\n– Уфа : Аэтерна, 2022. – С. 6–9.</div>","vignette":"dddddndddd-dd-2022_twl90t67cfr.jpg","colonne":"1","identifiant":"56789","media":"dddddndddd-dd-2022_twl90t67cfr.pdf","evaluations":0,"titre":"","id":"81","type":"pdf","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"OY1247","info":"Created on 02/27/2026 at 8:38 PM by OY1247."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-177222468434731966","commentaires":0,"iframe":"","texte":"<div>ФГОС третьего поколения определяет функциональную грамотность как способность решать учебные задачи и жизненные ситуации на основе сформированных <b>предметных, метапредметных и универсальных способов деятельности</b>. Другими словами, обучающиеся должны понимать, каким образом изучаемые предметы <b>помогают найти </b><b>место в жизни и профессию</b></div>","vignette":"/img/telechargement.png","colonne":"1","identifiant":"56789","media":"","evaluations":0,"titre":"","id":"82","type":"","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"CA8247","info":"Created on 02/27/2026 at 8:38 PM by CA8247."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-177222468434799226","commentaires":0,"iframe":"","texte":"<div>В международном исследовании PISA термин <b>«функциональная математическая грамотность»</b> означает «способность учащегося использовать математические знания, приобретенные им за время обучения в школе, для решения разнообразных задач межпредметного и практико-ориентированного содержания, для дальнейшего обучения и успешной социализации в обществе» </div>","vignette":"","colonne":"1","identifiant":"56789","media":"","evaluations":0,"titre":"","id":"83","type":"","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"YJ3587","info":"Created on 02/27/2026 at 8:38 PM by YJ3587."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-177222468434751a8a","commentaires":0,"iframe":"","texte":"<div>К<b> инструментам формирования математической грамотности</b> можно отнести следующие: </div><div>🔹 технология проблемного обучения, формирующая у обучающихся сообразительность, \n</div><div>находчивость, способность находить нестандартные решения; </div><div>🔹 проектная деятельность, позволяющая обучающимся ориентироваться в различных \n</div><div>ситуациях; </div><div>🔹 игровая деятельность, позволяющая поддерживать интерес детей к урокам математики</div>","vignette":"/img/telechargement.png","colonne":"1","identifiant":"56789","media":"","evaluations":0,"titre":"","id":"84","type":"","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"JD3658","info":"Created on 02/27/2026 at 8:38 PM by JD3658."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-17722246843478a8828","commentaires":0,"iframe":"","texte":"<div><b>Пример. </b>Проект: «Забор и \nматематика»\n\n</div>","vignette":"","colonne":"1","identifiant":"56789","media":"n28_lrx5haypj4e.png","evaluations":0,"titre":"","id":"85","type":"image","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"MA2417","info":"Created on 02/27/2026 at 8:38 PM by MA2417."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-1772224684347ac9848","commentaires":0,"iframe":"","texte":"<div>3. Семенистая, Т.В. Отбор заданий, ориентированных на развитие математической грамотности / Т.В. Семенистая // Академический вестник. – 2024. \n\n– № 1(63). –  С. 132–137</div>","vignette":"ddddddnndn-dd-2024_b2isemvg8xp.jpg","colonne":"1","identifiant":"56789","media":"ddddddnndn-dd-2024_b2isemvg8xp.pdf","evaluations":0,"titre":"","id":"86","type":"pdf","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"WI4864","info":"Created on 02/27/2026 at 8:38 PM by WI4864."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-1772224684347751ce8","commentaires":0,"iframe":"","texte":"<div>Для формирования математической грамотности недостаточно использовать задания школьного курса математики, в первую очередь необходимо обратить внимание на другие предметные области. В данной статье представлены задачи, которые также можно применить на уроках географии, биологии и внеклассных мероприятиях </div>","vignette":"","colonne":"1","identifiant":"56789","media":"","evaluations":0,"titre":"","id":"87","type":"","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"AO1790","info":"Created on 02/27/2026 at 8:38 PM by AO1790."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-17722246843471c7b58","commentaires":0,"iframe":"","texte":"<div>4. \n\n Щербатых, С.В. Образовательные модели формирования математической грамотности / С.В. Щербатых, </div><div>О.К. Подлипский // \n\nВестник Томского государственного педагогического университета (TSPU Bulletin). – 2024. – Вып. 5(235). – С. 147–156. – DOI:10.23951/1609-624X-2024-5-147-156</div>","vignette":"ddnddnnn-dd-2024_a6oe5cxkl7a.jpg","colonne":"1","identifiant":"56789","media":"ddnddnnn-dd-2024_a6oe5cxkl7a.pdf","evaluations":0,"titre":"","id":"88","type":"pdf","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"QZ5250","info":"Created on 02/27/2026 at 8:38 PM by QZ5250."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-17722246843472c65c","commentaires":0,"iframe":"","texte":"<div><b>Математическая грамотность</b> – это «способность индивидуума проводить математические рассуждения и формулировать, применять, интерпретировать математику для решения проблем в разнообразных контекстах реального мира»</div>","vignette":"","colonne":"1","identifiant":"56789","media":"","evaluations":0,"titre":"","id":"89","type":"","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"DD5787","info":"Created on 02/27/2026 at 8:38 PM by DD5787."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-17722246843479592d8","commentaires":0,"iframe":"","texte":"<div>Урок играет особую роль в формировании ма\nтематической грамотности, так как обеспечивает \nосвоение конкретного математического содержа\nния и демонстрацию его использования для ре\nшения жизненных задач.</div><div> ━═━═━═━═━═━═━═━═━━═━═</div><div>В процессе <b>формирования математических понятий </b>рекомендуется учитывать следующее обстоятельство: при описании каких процессов, явлений и ситуаций эти понятия могут быть использованы. </div><div> ━═━═━═━═━═━═━═━═━━═━═ </div><div>Так, арифметическая и геометрическая прогрессии могут рассматриваться как изменения в различных процессах, например популяции животных или накоплений на банковском \nвкладе</div>","vignette":"/img/telechargement.png","colonne":"1","identifiant":"56789","media":"","evaluations":0,"titre":"","id":"90","type":"","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"MA3321","info":"Created on 02/27/2026 at 8:38 PM by MA3321."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-17722246843476b6d78","commentaires":0,"iframe":"","texte":"<div>При этом следует обращать внимание обучающихся, что<b> математическое описание</b> – это есть моделирование ситуации, в процессе которого мы абстрагируемся от некоторых свойств рассматриваемого процесса, которые принимаем как незначимые</div>","vignette":"","colonne":"1","identifiant":"56789","media":"","evaluations":0,"titre":"","id":"91","type":"","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"EO3260","info":"Created on 02/27/2026 at 8:38 PM by EO3260."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-1772224684347b33ff8","commentaires":0,"iframe":"","texte":"<div>При решении текстовых арифметических задач необходимо показать их связь с заданиями по формированию математической грамотности.</div><div>━═━═━═━═━═━═━═━═━━═━═  </div><div>Так, в качестве методического приема может быть использована трансформация текстовой задачи в задание по формированию математической грамотности посредством добавления контекста, дополнения и изменения вопросов текстовой задачи. </div><div>━═━═━═━═━═━═━═━═━━═━═  </div><div>Так, вместо традиционных вопросов типа <b>«Сколько потребуется…»</b> можно</div><div>использовать вопросы <b>«Хватит ли…»</b>.  </div>","vignette":"/img/telechargement.png","colonne":"1","identifiant":"56789","media":"","evaluations":0,"titre":"","id":"92","type":"","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"OP5803","info":"Created on 02/27/2026 at 8:38 PM by OP5803."},{"date":"2026-02-27T20:38:04+00:00","bloc":"bloc-id-17722246843478a62b","commentaires":0,"iframe":"","texte":"<div>Также могут быть использованы задания из открытых источников – банков заданий. </div><div><b>Пример.</b> Задача из учебника по алгебре для 7 класса (Ю.Н.Макарычев, Н.Г.Миндюк, К.И.Нешков, С.Б.Суворова; 2024 г.)</div>","vignette":"/img/telechargement.png","colonne":"1","identifiant":"56789","media":"n29_jrpmyv5zaqq.png","evaluations":0,"titre":"","id":"93","type":"image","visibilite":"visible","source":"","listeCommentaires":[],"listeEvaluations":[],"nom":"PB8304","info":"Created on 02/27/2026 at 8:38 PM by PB8304."}],
+							colonnes: [],
+							commentaires: [],
+							noms: {},
+							titre: '',
+							defilement: false,
+							depart: 0,
+							distance: 0
+						},
+						methods: {
+							ouvrirModaleCommentaires (bloc) {
+								let commentaires = []
+								let titre = ''
+								this.blocs.forEach(function (item) {
+									if (item.bloc === bloc) {
+										commentaires = item.listeCommentaires
+										titre = item.titre
+									}
+								})
+								if (commentaires.length > 0) {
+									this.commentaires = commentaires
+									this.titre = titre
+									this.modaleCommentaires = true
+									this.$nextTick(function () {
+										document.querySelector('.modale .fermer').focus()
+									})
+								}
+							},
+							fermerModaleCommentaires () {
+								this.modaleCommentaires = false
+								this.commentaires = []
+								this.titre = ''
+							},
+							definirFond (fond) {
+								if (fond.substring(0, 1) === '#') {
+									return { backgroundColor: fond }
+								} else if (fond.includes('/img/')) {
+									return { backgroundImage: 'url(./static/' + fond + ')' }
+								} else {
+									return { backgroundImage: 'url(./fichiers/' + fond.split('/').pop() + ')' }
+								}
+							},
+							definirLargeurCapsules () {
+								let donnees
+								switch (this.pad.largeur) {
+								case 'large':
+									donnees = { default: 4, 1729: 4, 1449: 3, 1365: 2, 899: 2, 499: 1 }
+									break
+								case 'normale':
+									donnees = { default: 5, 1729: 5, 1449: 4, 1365: 3, 899: 2, 499: 1 }
+									break
+								}
+								return donnees
+							},
+							definirColonnes (blocs) {
+								const colonnes = []
+								if (this.pad.colonnes && JSON.parse(this.pad.colonnes).length > 0) {
+									this.pad.colonnes = JSON.parse(this.pad.colonnes)
+									this.pad.colonnes.forEach(function () {
+										colonnes.push([])
+									})
+									blocs.forEach(function (bloc, index) {
+										if (bloc.colonne !== undefined) {
+											colonnes[parseInt(bloc.colonne)].push(bloc)
+										} else {
+											blocs[index].colonne = 0
+											colonnes[bloc.colonne].push(bloc)
+										}
+									})
+								} else {
+									this.pad.colonnes.push('Colonne sans titre')
+									colonnes.push([])
+									blocs.forEach(function (bloc, index) {
+										blocs[index].colonne = 0
+										colonnes[0].push(bloc)
+									})
+								}
+								this.blocs = blocs
+								this.colonnes = colonnes
+							},
+							afficherMedia (item) {
+								let lien
+								if (this.verifierURL(item.media) === true) {
+									lien = item.media
+								} else {
+									lien = './fichiers/' + item.media
+								}
+								window.open(lien, '_blank')
+							},
+							definirVignette (item) {
+								let vignette
+								if (item.vignette && item.vignette !== '' && this.verifierURL(item.vignette) === false && String(item.vignette).includes('/img/')) {
+									vignette = './static/img/' + item.vignette.split('/').pop()
+								} else if (item.vignette && item.vignette !== '' && this.verifierURL(item.vignette) === false && !String(item.vignette).includes('/img/')) {
+									vignette = './fichiers/' + item.vignette.split('/').pop()
+								} else if (item.vignette && item.vignette !== '' && this.verifierURL(item.vignette) === true) {
+									vignette = item.vignette
+								}
+								return vignette
+							},
+							definirIconeMedia (item) {
+								let icone
+								switch (item.type) {
+								case 'image':
+								case 'lien-image':
+									icone = 'image'
+									break
+								case 'audio':
+									icone = 'volume_up'
+									break
+								case 'video':
+									icone = 'movie'
+									break
+								case 'pdf':
+								case 'document':
+								case 'office':
+									icone = 'description'
+									break
+								case 'lien':
+									icone = 'link'
+									break
+								case 'embed':
+									if (item.source === 'youtube' || item.source === 'vimeo' || item.source === 'dailymotion' || item.source === 'digiview') {
+										icone = 'movie'
+									} else if (item.source === 'slideshare' || item.media.includes('wikipedia.org') || item.media.includes('drive.google.com') || item.media.includes('docs.google.com')) {
+										icone = 'description'
+									} else if (item.source === 'flickr') {
+										icone = 'image'
+									} else if (item.source === 'soundcloud' || item.media.includes('vocaroo.com') || item.media.includes('voca.ro')) {
+										icone = 'volume_up'
+									} else if (item.media.includes('google.com/maps')) {
+										icone = 'place'
+									} else if (item.source === 'etherpad' || item.media.includes('framapad.org')) {
+										icone = 'group_work'
+									} else {
+										icone = 'web'
+									}
+									break
+								default:
+									icone = 'save_alt'
+									break
+								}
+								return icone
+							},
+							definirEvaluationCapsule (evaluations) {
+								if (evaluations && evaluations.length > 0) {
+									let note = 0
+									evaluations.forEach(function (evaluation) {
+										note = note + evaluation.etoiles
+									})
+									if (note > 0) {
+										return Math.round(note / evaluations.length)
+									} else {
+										return 0
+									}
+								} else {
+									return 0
+								}
+							},
+							verifierURL (lien) {
+								let url
+								try {
+									url = new URL(lien)
+								} catch (_) {
+									return false
+								}
+								return url.protocol === 'http:' || url.protocol === 'https:'
+							},
+							genererPseudo () {
+								const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+								const nom = caracteres.charAt(Math.floor(Math.random() * caracteres.length)) + caracteres.charAt(Math.floor(Math.random() * caracteres.length)) + Math.floor(Math.random() * (9999 - 1000) + 1000)
+								return nom
+							},
+							eclaircirCouleur (hex) {
+								if (hex && hex.substring(0, 1) === '#') {
+									const r = parseInt(hex.slice(1, 3), 16)
+									const v = parseInt(hex.slice(3, 5), 16)
+									const b = parseInt(hex.slice(5, 7), 16)
+									return 'rgba(' + r + ', ' + v + ', ' + b + ', ' + 0.15 + ')'
+								} else {
+									return 'transparent'
+								}
+							},
+							activerDefilementHorizontal () {
+								const pad = document.querySelector('#pad')
+								pad.addEventListener('mousedown', this.defilementHorizontalDebut)
+								pad.addEventListener('mouseleave', this.defilementHorizontalFin)
+								pad.addEventListener('mouseup', this.defilementHorizontalFin)
+								pad.addEventListener('mousemove', this.defilementHorizontalEnCours)
+							},
+							desactiverDefilementHorizontal () {
+								const pad = document.querySelector('#pad')
+								pad.removeEventListener('mousedown', this.defilementHorizontalDebut)
+								pad.removeEventListener('mouseleave', this.defilementHorizontalFin)
+								pad.removeEventListener('mouseup', this.defilementHorizontalFin)
+								pad.removeEventListener('mousemove', this.defilementHorizontalEnCours)
+							},
+							defilementHorizontalDebut (event) {
+								const pad = document.querySelector('#pad')
+								this.defilement = true
+								this.depart = event.pageX - pad.offsetLeft
+								this.distance = pad.scrollLeft
+							},
+							defilementHorizontalFin () {
+								this.defilement = false
+							},
+							defilementHorizontalEnCours (event) {
+								if (!this.defilement) { return }
+								event.preventDefault()
+								const pad = document.querySelector('#pad')
+								const x = event.pageX - pad.offsetLeft
+								const delta = (x - this.depart) * 1.5
+								pad.scrollLeft = this.distance - delta
+							}
+						},
+						created () {
+							if (this.pad.ordre === 'decroissant') {
+								this.blocs.reverse()
+							}
+							if (this.pad.affichage === 'colonnes') {
+								this.definirColonnes(this.blocs)
+							}
+						},
+						mounted () {
+							const noms = {}
+							this.blocs.forEach(function (bloc) {
+								if (bloc.hasOwnProperty('couleur') === false || bloc.couleur === null || typeof bloc.couleur !== 'string') {
+									bloc.couleur = '#242f3d'
+								}
+								if (noms.hasOwnProperty(bloc.identifiant) === false) {
+									noms[bloc.identifiant] = bloc.nom
+								}
+								bloc.listeCommentaires.forEach(function (commentaire) {
+									if (noms.hasOwnProperty(commentaire.identifiant) === false) {
+										noms[commentaire.identifiant] = this.genererPseudo()
+									}
+								}.bind(this))
+							}.bind(this))
+							this.noms = noms
+							document.title = this.pad.titre + ' - Digipad by La Digitale'
+							this.chargement = false
+							if (this.pad.affichage === 'colonnes') {
+								this.$nextTick(function () {
+									this.activerDefilementHorizontal()
+								}.bind(this))
+							}
+						}
+					})
+				</script>
+			</body>
+		</html>
